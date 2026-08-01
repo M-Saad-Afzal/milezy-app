@@ -1144,7 +1144,12 @@ async function cloudInsertEntry(entry){
   }catch(err){
     payload.local_id = entry.id;
     queueOp('insert', payload);
-    showToast(t('savedOffline'));
+    const msg = (err && err.message) || '';
+    if(/column|does not exist|schema cache/i.test(msg)){
+      showToast(t('schemaOutOfDate'));
+    } else {
+      showToast(t('savedOffline'));
+    }
   }
 }
 
@@ -1261,6 +1266,7 @@ const I18N = {
     sameAsBefore:"≈ same", newSpend:"new",
     syncingCount:"Syncing {n} entries to the cloud…", offlineCount:"Offline — {n} entries waiting to sync",
     allSynced:"All entries synced to the cloud", savedOffline:"Saved on this device — will sync when back online",
+    schemaOutOfDate:"Cloud database needs an update — re-run the setup SQL in Supabase, then this will sync.",
     updatedOffline:"Updated on this device — will sync when back online", deletedOffline:"Deleted on this device — will sync when back online",
     startTrip:"Start", stopTrip:"Stop", tripIdle:"Tap start before you drive", tripTracking:"Track mileage", mileageTrip:"Track a trip's mileage",
     gpsNotSupported:"GPS isn't supported on this browser.", gpsDenied:"Location blocked — tap the 🔒/ⓘ icon in the address bar and allow location access.",
@@ -1312,6 +1318,7 @@ const I18N = {
     sameAsBefore:"≈ برابر", newSpend:"نیا",
     syncingCount:"{n} انٹریز کلاؤڈ میں سنک ہو رہی ہیں…", offlineCount:"آف لائن — {n} انٹریز سنک کا انتظار کر رہی ہیں",
     allSynced:"تمام انٹریز کلاؤڈ میں سنک ہو گئیں", savedOffline:"اس ڈیوائس پر محفوظ ہوا — آن لائن آتے ہی سنک ہو جائے گا",
+    schemaOutOfDate:"کلاؤڈ ڈیٹابیس کو اپڈیٹ کی ضرورت ہے — Supabase میں سیٹ اپ SQL دوبارہ چلائیں، پھر یہ سنک ہو جائے گا۔",
     updatedOffline:"اس ڈیوائس پر اپڈیٹ ہوا — آن لائن آتے ہی سنک ہو جائے گا", deletedOffline:"اس ڈیوائس پر حذف ہوا — آن لائن آتے ہی سنک ہو جائے گا",
     startTrip:"شروع کریں", stopTrip:"روکیں", tripIdle:"چلانے سے پہلے سٹارٹ دبائیں", tripTracking:"مائلیج ٹریک کریں", mileageTrip:"سفر کی مائلیج ٹریک کریں",
     gpsNotSupported:"اس براؤزر پر GPS سپورٹ نہیں ہے۔", gpsDenied:"لوکیشن بلاک ہے — ایڈریس بار میں 🔒/ⓘ آئیکن پر ٹیپ کر کے لوکیشن کی اجازت دیں۔",
@@ -1387,15 +1394,28 @@ async function storeSet(key, value){
 async function loadData(){
   await loadSyncQueue();
 
+  // Always read the local cache first — it's our safety net.
+  let localEntries = [];
+  try{
+    const v = await storeGet('driver-entries');
+    localEntries = v ? JSON.parse(v) : [];
+  }catch(err){ localEntries = []; }
+
   const cloudEntries = await cloudLoadEntries();
   if(cloudEntries){
-    state.entries = cloudEntries;
+    // Cloud is authoritative for anything it has. But if some local entries
+    // never made it to the cloud (still sitting in the offline sync queue —
+    // e.g. because of a schema mismatch or being offline when created),
+    // keep them visible instead of silently dropping them.
+    const pendingLocalIds = new Set(
+      state.syncQueue.filter(q => q.op === 'insert').map(q => q.payload && q.payload.local_id).filter(Boolean)
+    );
+    const cloudIds = new Set(cloudEntries.map(e => e.id));
+    const stillPending = localEntries.filter(e => pendingLocalIds.has(e.id) && !cloudIds.has(e.id));
+    state.entries = [...cloudEntries, ...stillPending];
     await storeSet('driver-entries', JSON.stringify(state.entries));
   } else {
-    try{
-      const v = await storeGet('driver-entries');
-      state.entries = v ? JSON.parse(v) : [];
-    }catch(err){ state.entries = []; }
+    state.entries = localEntries;
   }
 
   const cloudSettings = await cloudLoadSettings();
