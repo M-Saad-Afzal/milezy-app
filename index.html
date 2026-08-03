@@ -817,6 +817,9 @@ async function initAuth(){
 function showAuthScreen(){
   document.getElementById('authScreen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
+  if(authMode !== 'reset'){
+    setAuthMode('login');
+  }
 }
 
 function showApp(){
