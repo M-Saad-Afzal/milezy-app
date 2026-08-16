@@ -26,8 +26,8 @@
   --border:#2a3340;
   --text:#eef1f4;
   --muted:#8b96a3;
-  --accent:#2dd4a7;
-  --accent-dim:#1b8a6f;
+  --accent:#3b9eff;
+  --accent-dim:#1e5fb8;
   --amber:#f5a623;
   --income:#4ade80;
   --expense:#f0645a;
@@ -75,7 +75,7 @@ body{
 }
 .auth-error{color:var(--expense);font-size:12px;min-height:16px;margin:4px 0 8px;text-align:left;}
 .auth-btn{
-  width:100%;background:var(--accent);color:#06231b;border:none;
+  width:100%;background:var(--accent);color:#0a1f33;border:none;
   padding:13px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;margin-top:6px;
 }
 .auth-btn:disabled{opacity:.6;cursor:default;}
@@ -123,7 +123,7 @@ body{
   border-radius:999px;
   cursor:pointer;
 }
-.lang-btn.active{background:var(--accent);color:#06231b;}
+.lang-btn.active{background:var(--accent);color:#0a1f33;}
 
 /* GAUGE DASHBOARD */
 .dash{
@@ -210,7 +210,7 @@ body{
 }
 .trip-card.active{
   border-color:var(--accent);
-  background:linear-gradient(135deg, rgba(45,212,167,0.1), rgba(45,212,167,0.02));
+  background:linear-gradient(135deg, rgba(59,158,255,0.1), rgba(59,158,255,0.02));
 }
 .trip-icon{
   width:38px;height:38px;border-radius:11px;flex-shrink:0;
@@ -224,13 +224,13 @@ body{
 .trip-btn{
   border:none;padding:9px 16px;border-radius:11px;font-weight:700;font-size:12.5px;cursor:pointer;flex-shrink:0;
 }
-.trip-btn.start{background:var(--accent);color:#06231b;}
+.trip-btn.start{background:var(--accent);color:#0a1f33;}
 .trip-btn.stop{background:var(--expense);color:#fff;}
 
 .tax-pot-card{
   margin:0 18px 16px;
-  background:linear-gradient(135deg, rgba(45,212,167,0.12), rgba(45,212,167,0.03));
-  border:1px solid rgba(45,212,167,0.3);
+  background:linear-gradient(135deg, rgba(59,158,255,0.12), rgba(59,158,255,0.03));
+  border:1px solid rgba(59,158,255,0.3);
   border-radius:16px;
   padding:16px 18px;
 }
@@ -333,7 +333,7 @@ body{
   border:1px solid var(--border);background:var(--panel);color:var(--muted);
   font-size:12px;font-weight:600;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;
 }
-.range-btn.active{background:var(--accent);color:#06231b;border-color:var(--accent);}
+.range-btn.active{background:var(--accent);color:#0a1f33;border-color:var(--accent);}
 .summary-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:0 18px 18px;}
 .mcard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:12px 10px;text-align:center;}
 .mcard-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:0 0 6px;}
@@ -347,7 +347,7 @@ body{
 .cat-row-amt{font-family:var(--font-mono);font-size:12.5px;font-weight:600;width:64px;text-align:right;flex-shrink:0;}
 .pdf-btn{
   margin:0 18px 24px;width:calc(100% - 36px);
-  background:var(--accent);color:#06231b;border:none;
+  background:var(--accent);color:#0a1f33;border:none;
   padding:14px;border-radius:14px;font-weight:700;font-size:14px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
@@ -360,7 +360,7 @@ body{
   padding:10px 12px;border-radius:10px;font-family:var(--font-mono);font-size:14px;
 }
 .goal-input-row button{
-  background:var(--accent);color:#06231b;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;
+  background:var(--accent);color:#0a1f33;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;
 }
 .goal-progress-track{height:10px;background:var(--panel-2);border-radius:6px;overflow:hidden;margin-bottom:8px;}
 .goal-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));border-radius:6px;transition:width .3s;}
@@ -370,14 +370,14 @@ body{
   flex:1;aspect-ratio:1;border-radius:10px;background:var(--panel-2);
   display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);font-weight:600;
 }
-.streak-day.hit{background:var(--accent);color:#06231b;}
+.streak-day.hit{background:var(--accent);color:#0a1f33;}
 
 /* SETTINGS */
 .settings-row{margin:0 18px 14px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;}
 .settings-label{font-size:12px;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;}
 .currency-pills{display:flex;gap:8px;}
 .pill{border:1px solid var(--border);background:var(--panel-2);color:var(--muted);padding:8px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;}
-.pill.active{background:var(--accent);color:#06231b;border-color:var(--accent);}
+.pill.active{background:var(--accent);color:#0a1f33;border-color:var(--accent);}
 .danger-btn{width:100%;background:transparent;border:1px solid var(--expense);color:var(--expense);padding:12px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer;}
 
 /* BOTTOM INPUT BAR */
@@ -402,7 +402,7 @@ body{
   cursor:pointer;flex-shrink:0;font-size:17px;
 }
 .ibar-btn.mic.recording{background:var(--expense);border-color:var(--expense);color:#fff;animation:pulse 1s infinite;}
-.ibar-btn.send{background:var(--accent);border-color:var(--accent);color:#06231b;}
+.ibar-btn.send{background:var(--accent);border-color:var(--accent);color:#0a1f33;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.55;}}
 
 /* BOTTOM NAV */
@@ -451,10 +451,10 @@ body{
 .modal-actions{display:flex;gap:8px;margin-top:14px;}
 .modal-actions button{flex:1;padding:11px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer;border:none;}
 .modal-cancel{background:var(--panel-2);color:var(--muted);}
-.modal-confirm{background:var(--accent);color:#06231b;}
+.modal-confirm{background:var(--accent);color:#0a1f33;}
 
 .spinner{
-  width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:#06231b;
+  width:16px;height:16px;border:2px solid rgba(255,255,255,0.25);border-top-color:#0a1f33;
   border-radius:50%;animation:spin .7s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -511,7 +511,7 @@ body{
     <div class="gauge-wrap">
       <svg width="112" height="112" viewBox="0 0 112 112">
         <circle cx="56" cy="56" r="48" fill="none" stroke="#2a3340" stroke-width="10"/>
-        <circle id="gaugeRing" cx="56" cy="56" r="48" fill="none" stroke="#2dd4a7" stroke-width="10" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6"/>
+        <circle id="gaugeRing" cx="56" cy="56" r="48" fill="none" stroke="#3b9eff" stroke-width="10" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="301.6"/>
       </svg>
       <div class="gauge-center">
         <div class="gauge-value" id="gaugePct">0%</div>
@@ -634,7 +634,7 @@ body{
       <div class="goal-progress-track"><div class="goal-progress-fill" id="monthlyGoalFill" style="width:0%"></div></div>
       <div class="goal-progress-text" id="monthlyGoalText">£0 / £0</div>
 
-      <button style="width:100%;margin-top:14px;background:var(--accent);color:#06231b;border:none;padding:11px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer" onclick="saveWeeklyMonthlyGoals()" data-i18n="save">Save</button>
+      <button style="width:100%;margin-top:14px;background:var(--accent);color:#0a1f33;border:none;padding:11px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer" onclick="saveWeeklyMonthlyGoals()" data-i18n="save">Save</button>
     </div>
   </div>
 
@@ -689,7 +689,7 @@ body{
         <input type="number" id="mileageThresholdInput" placeholder="10000">
       </div>
       <p class="settings-label" style="margin-top:2px" data-i18n="threshold">Miles threshold</p>
-      <button style="width:100%;margin-top:10px;background:var(--accent);color:#06231b;border:none;padding:11px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer" onclick="saveMileageRates()" data-i18n="save">Save</button>
+      <button style="width:100%;margin-top:10px;background:var(--accent);color:#0a1f33;border:none;padding:11px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer" onclick="saveMileageRates()" data-i18n="save">Save</button>
     </div>
     <div class="section-title"><span data-i18n="taxPotSettings">Tax pot</span></div>
     <div class="settings-row">
@@ -2747,7 +2747,7 @@ function exportPDF(){
 
   doc.setFillColor(16,20,26);
   doc.rect(0,0,210,32,'F');
-  doc.setTextColor(45,212,167);
+  doc.setTextColor(59,158,255);
   doc.setFontSize(18);
   doc.text('Milezy', 14, 15);
   doc.setFontSize(10);
