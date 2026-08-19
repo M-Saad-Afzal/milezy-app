@@ -80,6 +80,18 @@ body{
 }
 .auth-btn:disabled{opacity:.6;cursor:default;}
 .auth-toggle{font-size:12.5px;color:var(--muted);margin-top:16px;cursor:pointer;}
+.install-btn{
+  width:100%;margin-top:22px;
+  background:var(--panel-2);border:1px solid var(--accent);color:var(--accent);
+  padding:12px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.install-btn:active{background:rgba(59,158,255,0.12);}
+.install-ios-note{
+  margin-top:16px;font-size:11.5px;color:var(--muted);line-height:1.5;
+  background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;
+}
+.install-ios-note strong{color:var(--text);}
 .auth-forgot{font-size:12px;color:var(--accent);margin-top:12px;cursor:pointer;text-align:right;}
 .auth-toggle span{color:var(--accent);font-weight:600;}
 
@@ -490,6 +502,14 @@ body{
     <button class="auth-btn" id="authSubmitBtn" onclick="handleAuthSubmit()">Log In</button>
     <p class="auth-forgot" id="authForgotLink" onclick="showForgotPassword()">Forgot password?</p>
     <p class="auth-toggle" id="authToggle" onclick="toggleAuthMode()">Don't have an account? <span>Sign up</span></p>
+
+    <button class="install-btn" id="installAppBtn" onclick="triggerInstall()" style="display:none">
+      <span id="installBtnIcon"></span>
+      <span>Install app on this phone</span>
+    </button>
+    <p class="install-ios-note" id="installIosNote" style="display:none">
+      To install: tap the <strong>Share</strong> icon in Safari, then <strong>"Add to Home Screen"</strong>.
+    </p>
   </div>
 </div>
 
@@ -1289,7 +1309,8 @@ const I18N = {
     taxPotSettings:"Tax pot", taxPotSettingsHelp:"What % of your profit should the app automatically set aside for your Self Assessment tax bill? A common starting point is 25-30%, but your real rate depends on your total income — check with an accountant if unsure.",
     gpsWarmingUp:"Getting an accurate GPS lock — hold on…", gpsLockAcquired:"GPS locked — tracking started",
     confirmTrip:"Confirm this trip", tripConfirmNote:"GPS estimate below — check it against your dashboard odometer and correct it if needed before saving.",
-    milesLabel:"Miles driven"
+    milesLabel:"Miles driven",
+    appInstalled:"Milezy installed! Look for it on your home screen."
   },
   ur:{
     greetingLabel:"سلام", ofGoal:"گول کا", todayIncome:"آج کی آمدنی", todayExpense:"آج کا خرچہ",
@@ -1341,7 +1362,8 @@ const I18N = {
     taxPotSettings:"ٹیکس پاٹ", taxPotSettingsHelp:"آپ کے منافع کا کتنا فیصد ایپ خود بخود آپ کے Self Assessment ٹیکس بل کے لیے الگ رکھے؟ عام آغاز 25-30% ہے، لیکن اصل شرح آپ کی کل آمدنی پر منحصر ہے — یقینی نہ ہوں تو اکاؤنٹنٹ سے پوچھیں۔",
     gpsWarmingUp:"درست GPS سگنل حاصل کیا جا رہا ہے — انتظار کریں…", gpsLockAcquired:"GPS لاک ہو گیا — ٹریکنگ شروع",
     confirmTrip:"یہ سفر تصدیق کریں", tripConfirmNote:"نیچے GPS اندازہ ہے — محفوظ کرنے سے پہلے اپنے ڈیش بورڈ اوڈومیٹر سے چیک کر کے درست کر لیں۔",
-    milesLabel:"طے شدہ میل"
+    milesLabel:"طے شدہ میل",
+    appInstalled:"Milezy انسٹال ہو گئی! اپنی ہوم اسکرین پر دیکھیں۔"
   }
 };
 
@@ -2832,6 +2854,53 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('service-worker.js').catch(()=>{ /* not supported here, ignore */ });
   });
 }
+
+/* ---------- Install-to-home-screen button ---------- */
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  // Chrome/Android/Edge fire this when the app qualifies as installable.
+  // Stop the automatic mini-infobar and save the event so our own button can
+  // trigger the native install prompt on tap.
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  const btn = document.getElementById('installAppBtn');
+  if(btn) btn.style.display = 'flex';
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const btn = document.getElementById('installAppBtn');
+  if(btn) btn.style.display = 'none';
+  showToast(t('appInstalled'));
+});
+
+async function triggerInstall(){
+  if(!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  document.getElementById('installAppBtn').style.display = 'none';
+}
+
+function isIOSDevice(){
+  return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+}
+function isRunningStandalone(){
+  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+(function initInstallUI(){
+  const icon = document.getElementById('installBtnIcon');
+  if(icon) icon.innerHTML = svgIcon('<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/>');
+
+  if(isRunningStandalone()) return; // already installed / running as an app — nothing to show
+
+  if(isIOSDevice()){
+    const note = document.getElementById('installIosNote');
+    if(note) note.style.display = 'block';
+  }
+})();
 </script>
 </body>
 </html>
