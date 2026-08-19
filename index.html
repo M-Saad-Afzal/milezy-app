@@ -92,6 +92,9 @@ body{
   background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;
 }
 .install-ios-note strong{color:var(--text);}
+.check-email-icon{display:flex;justify-content:center;margin:8px 0 14px;}
+.check-email-title{font-family:var(--font-display);font-size:17px;font-weight:700;margin:0 0 8px;}
+.check-email-text{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 18px;}
 .auth-forgot{font-size:12px;color:var(--accent);margin-top:12px;cursor:pointer;text-align:right;}
 .auth-toggle span{color:var(--accent);font-weight:600;}
 
@@ -490,18 +493,33 @@ body{
     </div>
     <h1 class="auth-title">Milezy</h1>
     <p class="auth-sub" id="authSub">Log in to sync your data across every device.</p>
-    <div class="auth-field" id="authEmailField">
-      <label>Email</label>
-      <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+
+    <div id="authFormContainer">
+      <div class="auth-field" id="authEmailField">
+        <label>Email</label>
+        <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="auth-field" id="authPasswordField">
+        <label id="authPasswordLabel">Password</label>
+        <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <p class="auth-error" id="authError"></p>
+      <button class="auth-btn" id="authSubmitBtn" onclick="handleAuthSubmit()">Log In</button>
+      <p class="auth-forgot" id="authForgotLink" onclick="showForgotPassword()">Forgot password?</p>
+      <p class="auth-toggle" id="authToggle" onclick="toggleAuthMode()">Don't have an account? <span>Sign up</span></p>
     </div>
-    <div class="auth-field" id="authPasswordField">
-      <label id="authPasswordLabel">Password</label>
-      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+
+    <div id="checkEmailScreen" style="display:none">
+      <div class="check-email-icon">
+        <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#3b9eff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16v12H4z"/>
+          <path d="M4 7l8 6 8-6"/>
+        </svg>
+      </div>
+      <h2 class="check-email-title" data-i18n="checkEmailTitle">Check your email</h2>
+      <p class="check-email-text" id="checkEmailText" data-i18n="checkEmailText">We've sent a confirmation link to your email. Open it, confirm your account, then come back and log in.</p>
+      <button class="auth-btn" onclick="setAuthMode('login')" data-i18n="backToLogin">Back to login</button>
     </div>
-    <p class="auth-error" id="authError"></p>
-    <button class="auth-btn" id="authSubmitBtn" onclick="handleAuthSubmit()">Log In</button>
-    <p class="auth-forgot" id="authForgotLink" onclick="showForgotPassword()">Forgot password?</p>
-    <p class="auth-toggle" id="authToggle" onclick="toggleAuthMode()">Don't have an account? <span>Sign up</span></p>
 
     <button class="install-btn" id="installAppBtn" onclick="triggerInstall()" style="display:none">
       <span id="installBtnIcon"></span>
@@ -858,8 +876,20 @@ function setAuthMode(mode){
   const toggle = document.getElementById('authToggle');
   const sub = document.getElementById('authSub');
   const btn = document.getElementById('authSubmitBtn');
+  const formContainer = document.getElementById('authFormContainer');
+  const checkEmailScreen = document.getElementById('checkEmailScreen');
 
   document.getElementById('authError').textContent = '';
+
+  if(mode === 'check-email'){
+    formContainer.style.display = 'none';
+    checkEmailScreen.style.display = 'block';
+    sub.textContent = '';
+    return;
+  }
+  formContainer.style.display = 'block';
+  checkEmailScreen.style.display = 'none';
+
   emailField.style.display = 'block';
   passwordField.style.display = 'block';
   forgotLink.style.display = 'none';
@@ -988,9 +1018,9 @@ async function handleAuthSubmit(){
         currentUser = data.user;
         showApp();
       } else {
-        errorEl.style.color = 'var(--accent)';
-        errorEl.textContent = 'Account created! Check your email to confirm, then log in.';
-        setAuthMode('login');
+        document.getElementById('checkEmailText').textContent =
+          t('checkEmailText').replace('{email}', email);
+        setAuthMode('check-email');
       }
     }
   }catch(err){
@@ -1310,7 +1340,9 @@ const I18N = {
     gpsWarmingUp:"Getting an accurate GPS lock — hold on…", gpsLockAcquired:"GPS locked — tracking started",
     confirmTrip:"Confirm this trip", tripConfirmNote:"GPS estimate below — check it against your dashboard odometer and correct it if needed before saving.",
     milesLabel:"Miles driven",
-    appInstalled:"Milezy installed! Look for it on your home screen."
+    appInstalled:"Milezy installed! Look for it on your home screen.",
+    checkEmailTitle:"Check your email", checkEmailText:"We've sent a confirmation link to {email}. Open it, confirm your account, then come back and log in.",
+    backToLogin:"Back to login"
   },
   ur:{
     greetingLabel:"سلام", ofGoal:"گول کا", todayIncome:"آج کی آمدنی", todayExpense:"آج کا خرچہ",
@@ -1363,7 +1395,9 @@ const I18N = {
     gpsWarmingUp:"درست GPS سگنل حاصل کیا جا رہا ہے — انتظار کریں…", gpsLockAcquired:"GPS لاک ہو گیا — ٹریکنگ شروع",
     confirmTrip:"یہ سفر تصدیق کریں", tripConfirmNote:"نیچے GPS اندازہ ہے — محفوظ کرنے سے پہلے اپنے ڈیش بورڈ اوڈومیٹر سے چیک کر کے درست کر لیں۔",
     milesLabel:"طے شدہ میل",
-    appInstalled:"Milezy انسٹال ہو گئی! اپنی ہوم اسکرین پر دیکھیں۔"
+    appInstalled:"Milezy انسٹال ہو گئی! اپنی ہوم اسکرین پر دیکھیں۔",
+    checkEmailTitle:"اپنی ای میل چیک کریں", checkEmailText:"ہم نے {email} پر ایک تصدیقی لنک بھیجا ہے۔ اسے کھولیں، اپنا اکاؤنٹ تصدیق کریں، پھر واپس آ کر لاگ اِن کریں۔",
+    backToLogin:"لاگ اِن پر واپس جائیں"
   }
 };
 
