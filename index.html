@@ -198,6 +198,20 @@ body{
   background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:2px 6px;
 }
 .vehicle-remove:hover{color:var(--expense);}
+.toggle-row{display:flex;align-items:flex-start;gap:12px;}
+.switch{position:relative;display:inline-block;width:44px;height:26px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.switch-slider{
+  position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;
+  background:var(--panel-2);border:1px solid var(--border);border-radius:26px;transition:.2s;
+}
+.switch-slider:before{
+  position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;
+  background:var(--muted);border-radius:50%;transition:.2s;
+}
+.switch input:checked + .switch-slider{background:var(--accent);border-color:var(--accent);}
+.switch input:checked + .switch-slider:before{transform:translateX(18px);background:#0a1f33;}
+
 .vehicle-select{
   width:100%;background:var(--panel-2);border:1px solid var(--border);color:var(--text);
   padding:10px 12px;border-radius:10px;font-size:13px;font-family:var(--font-body);
@@ -724,6 +738,16 @@ body{
       <p class="settings-label" style="margin-top:14px" data-i18n="activeVehicle">Tagging new entries with</p>
       <select id="activeVehicleSelector" class="vehicle-select" onchange="setActiveVehicle(this.value)"></select>
     </div>
+    <div class="section-title"><span data-i18n="autoDetectTitle">Auto-detect driving</span></div>
+    <div class="settings-row">
+      <div class="toggle-row">
+        <p class="settings-label" style="margin:0;flex:1" data-i18n="autoDetectHelp">Automatically start and stop mileage tracking based on driving speed — no need to tap Start. Only works while Milezy is open in your browser (not when the app is closed or your phone is locked), and uses more battery while active.</p>
+        <label class="switch">
+          <input type="checkbox" id="autoDetectToggle" onchange="toggleAutoTripDetection(this.checked)">
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+    </div>
     <div class="section-title"><span data-i18n="mileageRates">Mileage allowance rates</span></div>
     <div class="settings-row">
       <p class="settings-label" data-i18n="mileageRatesHelp">Default matches UK HMRC rates: higher rate for the first threshold of miles each tax year, lower rate after.</p>
@@ -1109,7 +1133,8 @@ async function cloudLoadSettings(){
       mileageRate1: data.mileage_rate1!=null ? Number(data.mileage_rate1) : 0.55,
       mileageRate2: data.mileage_rate2!=null ? Number(data.mileage_rate2) : 0.25,
       mileageThreshold: data.mileage_threshold!=null ? Number(data.mileage_threshold) : 10000,
-      taxSetAsidePercent: data.tax_set_aside_percent!=null ? Number(data.tax_set_aside_percent) : 25
+      taxSetAsidePercent: data.tax_set_aside_percent!=null ? Number(data.tax_set_aside_percent) : 25,
+      autoTripDetection: !!data.auto_trip_detection
     };
   }catch(err){ return null; }
 }
@@ -1194,6 +1219,7 @@ async function cloudUpsertSettings(){
     mileage_rate2: state.settings.mileageRate2,
     mileage_threshold: state.settings.mileageThreshold,
     tax_set_aside_percent: state.settings.taxSetAsidePercent,
+    auto_trip_detection: !!state.settings.autoTripDetection,
     updated_at: new Date().toISOString()
   };
   if(!currentUser) return;
@@ -1369,7 +1395,9 @@ const I18N = {
     milesLabel:"Miles driven",
     appInstalled:"Milezy installed! Look for it on your home screen.",
     checkEmailTitle:"Check your email", checkEmailText:"We've sent a confirmation link to {email}. Open it, confirm your account, then come back and log in.",
-    backToLogin:"Back to login"
+    backToLogin:"Back to login",
+    autoDetectTitle:"Auto-detect driving", autoDetectHelp:"Automatically start and stop mileage tracking based on driving speed — no need to tap Start. Only works while Milezy is open in your browser (not when the app is closed or your phone is locked), and uses more battery while active.",
+    autoTripStarted:"Driving detected — mileage tracking started automatically", autoDetectOn:"Auto-detect turned on", autoDetectOff:"Auto-detect turned off"
   },
   ur:{
     greetingLabel:"سلام", ofGoal:"گول کا", todayIncome:"آج کی آمدنی", todayExpense:"آج کا خرچہ",
@@ -1424,7 +1452,9 @@ const I18N = {
     milesLabel:"طے شدہ میل",
     appInstalled:"Milezy انسٹال ہو گئی! اپنی ہوم اسکرین پر دیکھیں۔",
     checkEmailTitle:"اپنی ای میل چیک کریں", checkEmailText:"ہم نے {email} پر ایک تصدیقی لنک بھیجا ہے۔ اسے کھولیں، اپنا اکاؤنٹ تصدیق کریں، پھر واپس آ کر لاگ اِن کریں۔",
-    backToLogin:"لاگ اِن پر واپس جائیں"
+    backToLogin:"لاگ اِن پر واپس جائیں",
+    autoDetectTitle:"ڈرائیونگ خودکار پہچان", autoDetectHelp:"ڈرائیونگ کی رفتار کی بنیاد پر مائلیج ٹریکنگ خود بخود شروع اور بند ہو جائے گی — Start دبانے کی ضرورت نہیں۔ یہ صرف اس وقت کام کرتا ہے جب Milezy آپ کے براؤزر میں کھلی ہو (ایپ بند ہونے یا فون لاک ہونے پر نہیں)، اور فعال ہونے پر زیادہ بیٹری استعمال کرتا ہے۔",
+    autoTripStarted:"ڈرائیونگ محسوس ہوئی — مائلیج ٹریکنگ خود بخود شروع ہو گئی", autoDetectOn:"خودکار پہچان آن ہو گئی", autoDetectOff:"خودکار پہچان بند ہو گئی"
   }
 };
 
@@ -1436,6 +1466,7 @@ let state = {
     vehicles: [{id:'default', name:'My Vehicle'}],
     activeVehicleId: 'default',
     mileageRate1: 0.55, mileageRate2: 0.25, mileageThreshold: 10000,
+    autoTripDetection: false,
     taxSetAsidePercent: 25
   },
   reportRange: 'today',
@@ -1532,6 +1563,7 @@ async function loadData(){
   document.getElementById('mileageRate2Input').value = state.settings.mileageRate2 != null ? state.settings.mileageRate2 : 0.25;
   document.getElementById('mileageThresholdInput').value = state.settings.mileageThreshold != null ? state.settings.mileageThreshold : 10000;
   document.getElementById('taxPercentInput').value = state.settings.taxSetAsidePercent != null ? state.settings.taxSetAsidePercent : 25;
+  document.getElementById('autoDetectToggle').checked = !!state.settings.autoTripDetection;
   document.getElementById('nameInput').value = state.settings.driverName || '';
   document.getElementById('apiKeyInput').value = state.settings.apiKey || '';
   document.getElementById('greetingName').textContent = state.settings.driverName || 'Driver';
@@ -1547,6 +1579,7 @@ async function loadData(){
   updateSyncBanner();
   processSyncQueue();
   getTomorrowSuggestion();
+  startAutoDetectionSentinel();
 }
 
 /* Ask the browser to protect this site's storage from automatic eviction
@@ -2277,6 +2310,7 @@ async function startTrip(){
   trip.miles = 0;
   trip.startTime = null;
   trip.warmedUp = false;
+  trip.lowSpeedCount = 0;
 
   trip.watchId = navigator.geolocation.watchPosition((pos)=>{
     const { latitude, longitude, accuracy, speed } = pos.coords;
@@ -2325,6 +2359,23 @@ async function startTrip(){
       if(distance > 0.005 && impliedMph < 100 && impliedMph > 0.5){
         trip.miles += distance;
       }
+
+      // Auto-stop: if auto-detection is on and speed has stayed near zero
+      // for a sustained stretch, assume the trip has ended and wrap it up
+      // without waiting for the driver to tap Stop.
+      if(state.settings.autoTripDetection){
+        const mph = (typeof speed === 'number' && speed !== null) ? speed * 2.23694 : impliedMph;
+        if(mph < 2){
+          trip.lowSpeedCount = (trip.lowSpeedCount||0) + 1;
+        } else {
+          trip.lowSpeedCount = 0;
+        }
+        if(trip.lowSpeedCount >= 12){ // roughly a few minutes of being stopped
+          trip.lowSpeedCount = 0;
+          stopTrip();
+          return;
+        }
+      }
     }
     trip.points.push({lat:latitude, lon:longitude, t:pos.timestamp, acc:accuracy});
     updateTripUI();
@@ -2362,6 +2413,55 @@ async function stopTrip(silent){
   }
 
   openTripConfirm(miles);
+}
+
+/* ---------- Auto trip detection (no manual Start needed) ----------
+   A low-power "sentinel" watcher runs whenever the app is open and the
+   setting is on. It only checks speed — once the driver has clearly been
+   moving at driving speed for a little while, it calls startTrip() itself.
+   This can only run while this browser tab is open and active; mobile
+   operating systems suspend web pages once the app is closed or the phone
+   is locked for long, so this is not true background tracking like a
+   native app — it's "no button needed while Milezy is open." */
+let sentinelWatchId = null;
+let sentinelSpeedStreak = 0;
+
+function startAutoDetectionSentinel(){
+  if(!state.settings.autoTripDetection) return;
+  if(!navigator.geolocation) return;
+  if(sentinelWatchId != null) return;
+  sentinelSpeedStreak = 0;
+  sentinelWatchId = navigator.geolocation.watchPosition((pos)=>{
+    if(trip.active) return; // the full-precision trip watcher is already running
+    const speed = pos.coords.speed;
+    const mph = (typeof speed === 'number' && speed !== null) ? speed * 2.23694 : 0;
+    sentinelSpeedStreak = mph > 8 ? sentinelSpeedStreak + 1 : 0;
+    if(sentinelSpeedStreak >= 3){
+      sentinelSpeedStreak = 0;
+      showToast(t('autoTripStarted'));
+      startTrip();
+    }
+  }, ()=>{ /* stay silent — this is a background convenience watcher */ },
+  {enableHighAccuracy:false, maximumAge:15000, timeout:20000});
+}
+
+function stopAutoDetectionSentinel(){
+  if(sentinelWatchId != null){
+    navigator.geolocation.clearWatch(sentinelWatchId);
+    sentinelWatchId = null;
+  }
+}
+
+function toggleAutoTripDetection(enabled){
+  state.settings.autoTripDetection = enabled;
+  saveSettings();
+  if(enabled){
+    startAutoDetectionSentinel();
+    showToast(t('autoDetectOn'));
+  } else {
+    stopAutoDetectionSentinel();
+    showToast(t('autoDetectOff'));
+  }
 }
 
 function openTripConfirm(miles){
