@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Milezy</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#10141a; --panel:#1a2028; --panel-2:#212934; --border:#2a3340;
+  --text:#eef1f4; --muted:#8b96a3; --accent:#3b9eff;
+  --font-display:'Space Grotesk',sans-serif; --font-body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text); font-family:var(--font-body);
+  line-height:1.7; padding:0 0 60px;
+}
+.wrap{max-width:760px; margin:0 auto; padding:0 20px;}
+header{padding:36px 0 20px; border-bottom:1px solid var(--border); margin-bottom:32px;}
+header h1{font-family:var(--font-display); font-size:26px; margin:0 0 6px;}
+header p{color:var(--muted); font-size:13px; margin:0;}
+h2{font-family:var(--font-display); font-size:18px; color:var(--accent); margin:36px 0 12px;}
+h3{font-size:15px; margin:22px 0 8px; color:var(--text);}
+p, li{color:#c7ced6; font-size:14.5px;}
+ul{padding-left:20px;}
+li{margin-bottom:6px;}
+.box{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin:16px 0;}
+a{color:var(--accent);}
+.badge{
+  display:inline-block; background:var(--panel-2); border:1px solid var(--border);
+  color:var(--muted); font-size:11.5px; padding:3px 10px; border-radius:999px; margin-right:6px;
+}
+footer{margin-top:48px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:12.5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Privacy Policy</h1>
+  <p>Milezy · Last updated: 21 August 2026</p>
+</header>
+
+<p>This Privacy Policy explains what information Milezy ("the App", "we", "us") collects, how it is used, and what choices you have. Milezy is developed by Muhammad Saad Afzal. If you have questions about this policy, contact <a href="mailto:seriouslyopen1@gmail.com">seriouslyopen1@gmail.com</a>.</p>
+
+<h2>1. Who This Applies To</h2>
+<p>This policy applies to anyone who creates an account or uses Milezy through our website, our installed web-app, or our Android/iOS app listing. Milezy is intended for adults using it in a self-employed driving capacity (e.g. rideshare, taxi, or private-hire driving) and is not directed at children.</p>
+
+<h2>2. Information We Collect</h2>
+
+<h3>Account information</h3>
+<ul>
+  <li><strong>Email address and password</strong> — used to create and secure your account. Passwords are never stored in plain text; authentication is handled by our database provider, Supabase, which stores passwords in encrypted (hashed) form.</li>
+  <li><strong>Display name</strong> (optional) — shown inside the app.</li>
+</ul>
+
+<h3>Financial and trip data you enter</h3>
+<ul>
+  <li>Income and expense entries you log (amount, category, currency, date, optional notes, optional vehicle name)</li>
+  <li>GPS-tracked mileage (distance only — we do not store a continuous route history or map of where you have been; only the resulting distance and the entry you confirm)</li>
+  <li>Goals, tax set-aside percentage, and mileage-rate settings you configure</li>
+</ul>
+<p>This information is the core purpose of the App and is used solely to show you your own income, expenses, mileage, and reports.</p>
+
+<h3>Location data</h3>
+<p>If you use trip tracking or auto-detect driving, the App accesses your device's GPS location <strong>only while the relevant feature is active</strong> (i.e., while a trip is being tracked, or while auto-detect is switched on in Settings) to calculate distance travelled. Location access requires your explicit permission through your browser or device, and can be revoked at any time through your device or browser settings.</p>
+
+<h3>Camera / receipt photos</h3>
+<p>If you use the receipt-scan feature, a photo you take is processed on your device (or, if you have enabled the optional "Smart mode" with your own AI API key, sent to that AI provider for reading) purely to extract the amount, vendor, and category. <strong>The photo itself is not uploaded to or stored on our servers</strong> — only the extracted text data you confirm is saved.</p>
+
+<h3>Voice input</h3>
+<p>If you use voice entry, your device's browser speech-recognition service converts your spoken words to text. On most browsers (e.g. Chrome), this uses the browser's built-in speech recognition service, which may process audio through that browser vendor's own servers (e.g. Google) under their own privacy terms. Milezy itself does not record, store, or listen to your voice beyond receiving the resulting text.</p>
+
+<h3>Optional AI ("Smart mode")</h3>
+<p>Smart mode is off by default. If you choose to enter your own Anthropic (Claude) API key, the text of what you type or say, or a receipt image, is sent directly from your device to Anthropic's API to improve categorization accuracy. This is entirely optional, uses your own API key and your own Anthropic account and billing, and can be turned off at any time in Settings.</p>
+
+<h2>3. How We Use Your Information</h2>
+<ul>
+  <li>To provide the core functionality of the App — tracking, categorizing, and reporting your income, expenses, and mileage</li>
+  <li>To sync your data securely across your own devices</li>
+  <li>To calculate suggested tax set-aside amounts and mileage allowances</li>
+  <li>To respond to support requests</li>
+</ul>
+<p>We do not sell your personal data. We do not use your data for advertising, and Milezy does not currently display ads.</p>
+
+<h2>4. Who We Share Data With</h2>
+<div class="box">
+  <span class="badge">Supabase</span>
+  <p style="margin:8px 0 0">Our database and authentication provider. Supabase stores your account and entry data securely, with row-level security ensuring only you can access your own records. See <a href="https://supabase.com/privacy" target="_blank">Supabase's privacy policy</a>.</p>
+</div>
+<div class="box">
+  <span class="badge">Anthropic (optional)</span>
+  <p style="margin:8px 0 0">Only used if you enable Smart mode with your own API key. See <a href="https://www.anthropic.com/legal/privacy" target="_blank">Anthropic's privacy policy</a>.</p>
+</div>
+<div class="box">
+  <span class="badge">GitHub Pages</span>
+  <p style="margin:8px 0 0">Hosts the App's static files. Standard web server logs (e.g. IP address, browser type) may be collected by GitHub as part of normal hosting operation. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub's privacy statement</a>.</p>
+</div>
+<p>We do not share your data with any other third party except where required by law.</p>
+
+<h2>5. Data Storage and Security</h2>
+<p>Your data is stored in a Postgres database managed by Supabase, protected by row-level security policies that restrict every driver's data to that driver alone. Data in transit is encrypted (HTTPS/TLS). No method of storage or transmission is 100% secure, but we take reasonable, industry-standard steps to protect your information.</p>
+
+<h2>6. Data Retention and Deletion</h2>
+<ul>
+  <li>You can delete individual entries at any time within the App.</li>
+  <li>You can request full account and data deletion at any time by contacting <a href="mailto:seriouslyopen1@gmail.com">seriouslyopen1@gmail.com</a>. We will delete your account and associated data within 30 days of a verified request, except where we are legally required to retain certain records for longer.</li>
+</ul>
+
+<h2>7. Your Rights</h2>
+<p>Depending on where you live, you may have rights to access, correct, export, or delete your personal data, and to object to or restrict certain processing (for example, under the UK/EU GDPR or the California Consumer Privacy Act). To exercise any of these rights, contact us at the email above.</p>
+
+<h2>8. International Data Transfers</h2>
+<p>Your data may be processed on servers located outside your own country (for example, Supabase's infrastructure). Where this happens, we rely on our providers' own legal safeguards for international data transfers.</p>
+
+<h2>9. Children's Privacy</h2>
+<p>Milezy is not directed at, and should not be used by, anyone under the age of 18. We do not knowingly collect data from children.</p>
+
+<h2>10. Changes to This Policy</h2>
+<p>We may update this Privacy Policy from time to time. Material changes will be reflected by an updated "Last updated" date at the top of this page.</p>
+
+<h2>11. Contact Us</h2>
+<p>Questions, requests, or concerns about this policy or your data can be sent to: <a href="mailto:seriouslyopen1@gmail.com">seriouslyopen1@gmail.com</a></p>
+
+<footer>
+  Milezy — driving made accountable.
+</footer>
+
+</div>
+</body>
+</html>
