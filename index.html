@@ -2982,48 +2982,145 @@ function exportPDF(){
   const entries = getRangeEntries(state.reportRange);
   const income = entries.filter(e=>e.type==='income').reduce((s,e)=>s+Number(e.amount||0),0);
   const expense = entries.filter(e=>e.type==='expense').reduce((s,e)=>s+Number(e.amount||0),0);
-
-  doc.setFillColor(16,20,26);
-  doc.rect(0,0,210,32,'F');
-  doc.setTextColor(59,158,255);
-  doc.setFontSize(18);
-  doc.text('Milezy', 14, 15);
-  doc.setFontSize(10);
-  doc.setTextColor(200,200,200);
+  const profit = income - expense;
   const rangeLabel = {today:'Today', week:'This week', month:'This month', all:'All time'}[state.reportRange];
-  doc.text('Earnings report — '+rangeLabel+' — '+state.settings.driverName, 14, 23);
 
-  doc.setTextColor(20,20,20);
-  doc.setFontSize(12);
-  doc.text('Summary', 14, 42);
-  doc.autoTable({
-    startY: 46,
-    head: [['Metric','Amount']],
-    body: [
-      ['Income', fmt(income)],
-      ['Expense', fmt(expense)],
-      ['Profit', fmt(income-expense)]
-    ],
-    theme:'grid',
-    headStyles:{fillColor:[26,32,40]},
-    styles:{fontSize:10}
+  // Brand palette (matches the app)
+  const C = {
+    navy: [10,14,20], navy2: [21,27,36], accent: [59,158,255], accentDim: [30,95,184],
+    income: [16,150,110], expense: [214,73,73], text: [24,29,38], muted: [110,120,132],
+    line: [225,230,236], cardBg: [246,248,251]
+  };
+
+  /* ---------- Header band with logo mark ---------- */
+  doc.setFillColor(...C.navy);
+  doc.rect(0,0,210,40,'F');
+
+  // Simple road/pin logo mark, drawn with primitives
+  const lx = 16, ly = 12;
+  doc.setDrawColor(...C.accent);
+  doc.setLineWidth(1.6);
+  doc.setLineCap('round');
+  doc.setLineJoin('round');
+  doc.line(lx, ly+13, lx+3, ly+7);
+  doc.line(lx+3, ly+7, lx+5.5, ly+10.5);
+  doc.line(lx+5.5, ly+10.5, lx+8, ly+4);
+  doc.line(lx+8, ly+4, lx+10.5, ly+13);
+  doc.setFillColor(...C.accent);
+  doc.circle(lx+5.5, ly+2.5, 1.6, 'F');
+
+  doc.setTextColor(...C.accent);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(20);
+  doc.text('Milezy', 32, 19);
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  doc.setTextColor(190,198,208);
+  doc.text('Earnings report — ' + rangeLabel, 32, 27);
+  doc.setFontSize(8.5);
+  doc.setTextColor(140,150,163);
+  doc.text((state.settings.driverName || 'Driver') + '  ·  Generated ' + new Date().toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}), 32, 33);
+
+  /* ---------- Summary cards ---------- */
+  const cardY = 50, cardH = 28, cardW = 58, gap = 6;
+  const cards = [
+    {label:'INCOME', value: fmt(income), color: C.income},
+    {label:'EXPENSE', value: fmt(expense), color: C.expense},
+    {label:'PROFIT', value: fmt(profit), color: C.accent}
+  ];
+  cards.forEach((card, i)=>{
+    const x = 14 + i*(cardW+gap);
+    doc.setFillColor(...C.cardBg);
+    doc.roundedRect(x, cardY, cardW, cardH, 3, 3, 'F');
+    doc.setFillColor(...card.color);
+    doc.roundedRect(x, cardY, 2.2, cardH, 1, 1, 'F');
+    doc.setTextColor(...C.muted);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text(card.label, x+8, cardY+10);
+    doc.setTextColor(...C.text);
+    doc.setFontSize(14.5);
+    doc.text(card.value, x+8, cardY+20);
   });
 
+  /* ---------- Category breakdown bars ---------- */
+  let cursorY = cardY + cardH + 14;
+  const catTotals = {};
+  entries.filter(e=>e.type==='expense').forEach(e=>{
+    catTotals[e.category] = (catTotals[e.category]||0) + Number(e.amount||0);
+  });
+  const catEntries = Object.entries(catTotals).sort((a,b)=>b[1]-a[1]).slice(0,6);
+
+  if(catEntries.length){
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(11);
+    doc.setTextColor(...C.text);
+    doc.text('Category Breakdown', 14, cursorY);
+    cursorY += 7;
+    const maxVal = catEntries[0][1] || 1;
+    const barMaxWidth = 110;
+    catEntries.forEach(([cat, amt])=>{
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(9);
+      doc.setTextColor(...C.text);
+      doc.text(cat, 14, cursorY+3.5);
+      doc.setFillColor(230,234,239);
+      doc.roundedRect(60, cursorY, barMaxWidth, 4, 1.5, 1.5, 'F');
+      const w = Math.max(3, (amt/maxVal) * barMaxWidth);
+      doc.setFillColor(...C.accent);
+      doc.roundedRect(60, cursorY, w, 4, 1.5, 1.5, 'F');
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(9);
+      doc.setTextColor(...C.text);
+      doc.text(fmt(amt), 176, cursorY+3.5);
+      cursorY += 9;
+    });
+    cursorY += 6;
+  }
+
+  /* ---------- Entries table ---------- */
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.setTextColor(...C.text);
+  doc.text('All Entries', 14, cursorY);
+
   const entriesBody = [...entries].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(e=>[
-    new Date(e.date).toLocaleString(),
-    e.type,
+    new Date(e.date).toLocaleDateString(undefined,{day:'numeric',month:'short'}),
+    e.type === 'income' ? 'Income' : 'Expense',
     e.category,
-    e.vendor || '',
-    fmt(e.amount)
+    e.vendor || e.vehicle || '—',
+    (e.type==='income'?'+':'-') + fmt(e.amount)
   ]);
-  doc.text('Entries', 14, doc.lastAutoTable.finalY + 12);
+
   doc.autoTable({
-    startY: doc.lastAutoTable.finalY + 16,
-    head: [['Date','Type','Category','Vendor','Amount']],
+    startY: cursorY + 5,
+    head: [['Date','Type','Category','Vendor / Vehicle','Amount']],
     body: entriesBody.length ? entriesBody : [['—','—','—','—','—']],
-    theme:'striped',
-    headStyles:{fillColor:[26,32,40]},
-    styles:{fontSize:9}
+    theme:'plain',
+    margin:{left:14, right:14},
+    headStyles:{fillColor:C.navy2, textColor:255, fontStyle:'bold', fontSize:9, cellPadding:{top:5,bottom:5,left:4,right:4}},
+    bodyStyles:{fontSize:9, textColor:C.text, cellPadding:{top:4.5,bottom:4.5,left:4,right:4}, lineColor:C.line, lineWidth:0.1},
+    alternateRowStyles:{fillColor: C.cardBg},
+    columnStyles:{4:{halign:'right', fontStyle:'bold'}},
+    didParseCell: function(data){
+      if(data.section === 'body' && data.column.index === 4){
+        const isIncome = data.row.raw[1] === 'Income';
+        data.cell.styles.textColor = isIncome ? C.income : C.expense;
+      }
+    },
+    didDrawPage: function(){
+      const pageH = doc.internal.pageSize.getHeight();
+      const pageW = doc.internal.pageSize.getWidth();
+      doc.setDrawColor(...C.line);
+      doc.setLineWidth(0.2);
+      doc.line(14, pageH-16, pageW-14, pageH-16);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(8);
+      doc.setTextColor(...C.muted);
+      doc.text('Milezy — driving made accountable.', 14, pageH-10);
+      doc.text('Page ' + doc.internal.getCurrentPageInfo().pageNumber + ' of ' + doc.internal.getNumberOfPages(), pageW-14, pageH-10, {align:'right'});
+    }
   });
 
   doc.save('milezy-report-'+state.reportRange+'.pdf');
