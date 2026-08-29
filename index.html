@@ -2996,31 +2996,52 @@ function exportPDF(){
   doc.setFillColor(...C.navy);
   doc.rect(0,0,210,40,'F');
 
-  // Simple road/pin logo mark, drawn with primitives
-  const lx = 16, ly = 12;
-  doc.setDrawColor(...C.accent);
-  doc.setLineWidth(1.6);
+  // Logo mark — same proportions as the app's SVG logo (viewBox 0 0 380 380),
+  // scaled down and redrawn with PDF primitives since PDFs can't embed the
+  // live SVG directly.
+  const S = 20/380; // scale: 20mm icon
+  const OX = 15, OY = 9;
+  const P = (x,y) => [OX + x*S, OY + y*S];
+  const [ax,ay] = P(90,280), [bx,by] = P(145,150), [cx,cy] = P(190,210), [dx,dy] = P(235,150), [ex,ey] = P(290,280);
+  const [pinX,pinY] = P(190,118);
+
   doc.setLineCap('round');
   doc.setLineJoin('round');
-  doc.line(lx, ly+13, lx+3, ly+7);
-  doc.line(lx+3, ly+7, lx+5.5, ly+10.5);
-  doc.line(lx+5.5, ly+10.5, lx+8, ly+4);
-  doc.line(lx+8, ly+4, lx+10.5, ly+13);
+
+  // Soft glow pass (drawn as a dim, thicker solid line behind the main line)
+  doc.setDrawColor(...C.accentDim);
+  doc.setLineWidth(0.95);
+  doc.line(ax,ay,bx,by); doc.line(bx,by,cx,cy); doc.line(cx,cy,dx,dy); doc.line(dx,dy,ex,ey);
+
+  // Main bright line (the "M" road shape)
+  doc.setDrawColor(...C.accent);
+  doc.setLineWidth(0.45);
+  doc.line(ax,ay,bx,by); doc.line(bx,by,cx,cy); doc.line(cx,cy,dx,dy); doc.line(dx,dy,ex,ey);
+
+  // Destination pin: filled dot + outer ring
   doc.setFillColor(...C.accent);
-  doc.circle(lx+5.5, ly+2.5, 1.6, 'F');
+  doc.circle(pinX, pinY, 0.58, 'F');
+  doc.setDrawColor(...C.accent);
+  doc.setLineWidth(0.22);
+  doc.circle(pinX, pinY, 1.05, 'S');
+
+  // Waypoint dots at each end of the road
+  doc.setFillColor(143,212,255);
+  doc.circle(ax, ay, 0.32, 'F');
+  doc.circle(ex, ey, 0.32, 'F');
 
   doc.setTextColor(...C.accent);
   doc.setFont('helvetica','bold');
   doc.setFontSize(20);
-  doc.text('Milezy', 32, 19);
+  doc.text('Milezy', 35, 19);
 
   doc.setFont('helvetica','normal');
   doc.setFontSize(10);
   doc.setTextColor(190,198,208);
-  doc.text('Earnings report — ' + rangeLabel, 32, 27);
+  doc.text('Earnings report — ' + rangeLabel, 35, 27);
   doc.setFontSize(8.5);
   doc.setTextColor(140,150,163);
-  doc.text((state.settings.driverName || 'Driver') + '  ·  Generated ' + new Date().toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}), 32, 33);
+  doc.text((state.settings.driverName || 'Driver') + '  ·  Generated ' + new Date().toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}), 35, 33);
 
   /* ---------- Summary cards ---------- */
   const cardY = 50, cardH = 28, cardW = 58, gap = 6;
