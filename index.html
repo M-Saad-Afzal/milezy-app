@@ -1,3 +1,10 @@
+<!--
+  Milezy
+  Copyright © 2026 Muhammad Saad Afzal. All rights reserved.
+  This source code and its associated assets are proprietary and may not be
+  copied, reproduced, distributed, or used to create derivative works
+  without express written permission from the copyright holder.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -455,6 +462,8 @@ button:active{transform:scale(0.96);}
 .pill{border:1px solid var(--border);background:var(--panel-2);color:var(--muted);padding:8px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;}
 .pill.active{background:linear-gradient(135deg,var(--accent),var(--accent-dim));color:#0a1f33;border-color:transparent;}
 .danger-btn{width:100%;background:transparent;border:1px solid var(--expense);color:var(--expense);padding:12px;border-radius:12px;font-weight:600;font-size:13px;cursor:pointer;}
+.copyright-footer{text-align:center;font-size:11px;color:var(--muted);margin:20px 18px 0;line-height:1.6;}
+.copyright-footer a{color:var(--muted);text-decoration:underline;}
 
 /* BOTTOM INPUT BAR */
 .input-bar{
@@ -852,6 +861,7 @@ button:active{transform:scale(0.96);}
       <p class="settings-label" data-i18n="resetWarning">This deletes all your saved entries permanently.</p>
       <button class="danger-btn" onclick="resetData()" data-i18n="resetData">Reset all data</button>
     </div>
+    <p class="copyright-footer">© 2026 Milezy. All rights reserved. <a href="privacy.html" target="_blank">Privacy Policy</a></p>
   </div>
 
   <div class="input-bar">
@@ -3139,7 +3149,7 @@ function exportPDF(){
       doc.setFont('helvetica','normal');
       doc.setFontSize(8);
       doc.setTextColor(...C.muted);
-      doc.text('Milezy — driving made accountable.', 14, pageH-10);
+      doc.text('© 2026 Milezy. All rights reserved.', 14, pageH-10);
       doc.text('Page ' + doc.internal.getCurrentPageInfo().pageNumber + ' of ' + doc.internal.getNumberOfPages(), pageW-14, pageH-10, {align:'right'});
     }
   });
