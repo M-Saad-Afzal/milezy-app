@@ -1163,7 +1163,9 @@ function handleSignOut(){
 async function cloudLoadEntries(){
   if(!currentUser) return null;
   try{
-    const { data, error } = await sb.from('entries').select('*').eq('user_id', currentUser.id).order('date', {ascending:false});
+    const { data, error } = await sb.from('entries')
+      .select('id,type,category,amount,currency,note,vendor,source,vehicle,miles,date')
+      .eq('user_id', currentUser.id).order('date', {ascending:false});
     if(error) throw error;
     return data.map(row => ({
       id: row.id,
@@ -1582,31 +1584,50 @@ async function storeSet(key, value){
 async function loadData(){
   await loadSyncQueue();
 
-  // Always read the local cache first — it's our safety net.
+  // Always read the local cache first — it's our safety net, and often all
+  // we need if the data was synced recently.
   let localEntries = [];
   try{
     const v = await storeGet('driver-entries');
     localEntries = v ? JSON.parse(v) : [];
   }catch(err){ localEntries = []; }
 
-  const cloudEntries = await cloudLoadEntries();
-  if(cloudEntries){
-    // Cloud is authoritative for anything it has. But if some local entries
-    // never made it to the cloud (still sitting in the offline sync queue —
-    // e.g. because of a schema mismatch or being offline when created),
-    // keep them visible instead of silently dropping them.
-    const pendingLocalIds = new Set(
-      state.syncQueue.filter(q => q.op === 'insert').map(q => q.payload && q.payload.local_id).filter(Boolean)
-    );
-    const cloudIds = new Set(cloudEntries.map(e => e.id));
-    const stillPending = localEntries.filter(e => pendingLocalIds.has(e.id) && !cloudIds.has(e.id));
-    state.entries = [...cloudEntries, ...stillPending];
-    await storeSet('driver-entries', JSON.stringify(state.entries));
-  } else {
+  // Bandwidth guard: skip re-downloading everything from the cloud if we
+  // already synced within the last few minutes. Actions (add/edit/delete)
+  // always write straight to the cloud regardless of this — this only
+  // affects the "reload everything on open" step, which is the main source
+  // of repeated, avoidable data transfer for returning users.
+  const SYNC_TTL_MS = 5 * 60 * 1000;
+  let lastSyncAt = 0;
+  try{
+    const v = await storeGet('driver-last-sync');
+    lastSyncAt = v ? Number(v) : 0;
+  }catch(err){ lastSyncAt = 0; }
+  const cacheIsFresh = localEntries.length > 0 && (Date.now() - lastSyncAt) < SYNC_TTL_MS;
+
+  if(cacheIsFresh){
     state.entries = localEntries;
+  } else {
+    const cloudEntries = await cloudLoadEntries();
+    if(cloudEntries){
+      // Cloud is authoritative for anything it has. But if some local entries
+      // never made it to the cloud (still sitting in the offline sync queue —
+      // e.g. because of a schema mismatch or being offline when created),
+      // keep them visible instead of silently dropping them.
+      const pendingLocalIds = new Set(
+        state.syncQueue.filter(q => q.op === 'insert').map(q => q.payload && q.payload.local_id).filter(Boolean)
+      );
+      const cloudIds = new Set(cloudEntries.map(e => e.id));
+      const stillPending = localEntries.filter(e => pendingLocalIds.has(e.id) && !cloudIds.has(e.id));
+      state.entries = [...cloudEntries, ...stillPending];
+      await storeSet('driver-entries', JSON.stringify(state.entries));
+      await storeSet('driver-last-sync', String(Date.now()));
+    } else {
+      state.entries = localEntries;
+    }
   }
 
-  const cloudSettings = await cloudLoadSettings();
+  const cloudSettings = cacheIsFresh ? null : await cloudLoadSettings();
   if(cloudSettings){
     state.settings = Object.assign(state.settings, cloudSettings);
   }
