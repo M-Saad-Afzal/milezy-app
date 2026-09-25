@@ -631,6 +631,7 @@ button:active{transform:scale(0.96);}
     </div>
     <div class="lang-toggle">
       <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">HI</button>
       <button class="lang-btn" data-lang="ur" onclick="setLanguage('ur')">UR</button>
     </div>
   </div>
@@ -1522,6 +1523,63 @@ const I18N = {
     backToLogin:"لاگ اِن پر واپس جائیں",
     autoDetectTitle:"ڈرائیونگ خودکار پہچان", autoDetectHelp:"ڈرائیونگ کی رفتار کی بنیاد پر مائلیج ٹریکنگ خود بخود شروع اور بند ہو جائے گی — Start دبانے کی ضرورت نہیں۔ یہ صرف اس وقت کام کرتا ہے جب Milezy آپ کے براؤزر میں کھلی ہو (ایپ بند ہونے یا فون لاک ہونے پر نہیں)، اور فعال ہونے پر زیادہ بیٹری استعمال کرتا ہے۔",
     autoTripStarted:"ڈرائیونگ محسوس ہوئی — مائلیج ٹریکنگ خود بخود شروع ہو گئی", autoDetectOn:"خودکار پہچان آن ہو گئی", autoDetectOff:"خودکار پہچان بند ہو گئی"
+  },
+  hi:{
+    greetingLabel:"नमस्ते", ofGoal:"लक्ष्य का", todayIncome:"आज की आय", todayExpense:"आज का खर्च",
+    todayProfit:"आज का मुनाफ़ा", tomorrowSuggestion:"कल का सुझाव", loadingSuggestion:"आपके पैटर्न का विश्लेषण हो रहा है…",
+    refresh:"रीफ्रेश", suggestionNote:"यह सुझाव आपकी अपनी सेव की गई हिस्ट्री पर आधारित है, लाइव ट्रैफ़िक या मौसम डेटा पर नहीं।",
+    recentEntries:"हाल की एंट्रीज़", rangeToday:"आज", rangeWeek:"इस हफ्ते", rangeMonth:"इस महीने", rangeAll:"पूरा समय",
+    income:"आय", expense:"खर्च", profit:"मुनाफ़ा", categoryBreakdown:"श्रेणी के अनुसार", downloadPdf:"PDF रिपोर्ट डाउनलोड करें",
+    dailyGoal:"दैनिक कमाई का लक्ष्य", save:"सेव करें", last7days:"पिछले 7 दिन", currency:"करेंसी", chooseCurrency:"करेंसी चुनें",
+    yourName:"आपका नाम", dataManagement:"डेटा", resetWarning:"यह आपकी सभी सेव की गई एंट्रीज़ हमेशा के लिए डिलीट कर देगा।",
+    resetData:"सभी डेटा रीसेट करें", navHome:"होम", navReports:"रिपोर्ट्स", navGoals:"लक्ष्य", navSettings:"सेटिंग्स",
+    confirmReceipt:"रसीद की जानकारी की पुष्टि करें", vendor:"दुकान / जगह", category:"श्रेणी", amount:"राशि",
+    cancel:"रद्द करें", addEntry:"एंट्री जोड़ें", noEntries:"अभी कोई एंट्री नहीं है। ऊपर अपना पहला खर्च या आय टाइप करें या बोलें।",
+    entryAdded:"एंट्री जोड़ी गई", listening:"सुन रहा हूँ…", voiceNotSupported:"इस ब्राउज़र पर वॉइस इनपुट सपोर्ट नहीं है।",
+    scanningReceipt:"रसीद स्कैन हो रही है…", goalSaved:"लक्ष्य सेव हो गया", nameSaved:"नाम सेव हो गया", dataReset:"सारा डेटा साफ़ कर दिया गया",
+    confirmReset:"क्या आपको यक़ीन है? यह वापस नहीं हो सकता।", pdfReady:"PDF डाउनलोड हो गई",
+    apiKeyTitle:"स्मार्ट मोड (वैकल्पिक)", apiKeyHelp:"ऐप हमेशा मुफ़्त में लोकल मैचिंग से काम करता है। ज़्यादा स्मार्ट AI कैटेगराइज़ेशन और रसीद स्कैनिंग के लिए यहाँ Claude API की जोड़ें — यह वैकल्पिक और पेड है।",
+    clearKey:"स्मार्ट मोड बंद करें", keySaved:"स्मार्ट मोड ऑन — अब आपकी API की इस्तेमाल हो रही है", keyCleared:"स्मार्ट मोड बंद — मुफ़्त लोकल मैचिंग पर वापस",
+    needKey:"Claude.ai के बाहर चलाने के लिए AI फ़ीचर्स को API की चाहिए। सेटिंग्स में जोड़ें।",
+    keyActive:"स्मार्ट मोड ऑन है (आपकी API की)। कैटेगराइज़ेशन और रसीद स्कैन Claude AI इस्तेमाल करते हैं।", keyless:"Claude.ai के अंदर चल रहा है — मुफ़्त मोड के साथ बिल्ट-इन AI भी, किसी की की ज़रूरत नहीं।",
+    confirmDelete:"यह एंट्री डिलीट करें? यह वापस नहीं हो सकता।", entryDeleted:"एंट्री डिलीट हो गई",
+    downloadCsv:"CSV डाउनलोड करें (Excel)", csvReady:"CSV डाउनलोड हो गई",
+    backupReminder:"आपका डेटा सिर्फ़ इसी ब्राउज़र में है। इसे सुरक्षित रखने के लिए बैकअप कर लें।", backupNow:"अभी बैकअप करें",
+    entryType:"प्रकार", editEntry:"एंट्री में बदलाव करें", saveChanges:"बदलाव सेव करें", entryUpdated:"एंट्री अपडेट हो गई",
+    backupTitle:"बैकअप और बहाली", backupHelp:"आपका डेटा सिर्फ़ इसी ब्राउज़र में सेव है। नियमित रूप से या डिवाइस बदलते समय बैकअप फ़ाइल एक्सपोर्ट करें।",
+    exportData:"बैकअप एक्सपोर्ट करें (.json)", importData:"बैकअप इम्पोर्ट करें (.json)", backupExported:"बैकअप फ़ाइल डाउनलोड हो गई",
+    backupImported:"बैकअप बहाल हो गया", backupImportError:"वह बैकअप फ़ाइल पढ़ी नहीं जा सकी", confirmImport:"यह आपके मौजूदा डेटा को बैकअप से बदल देगा। जारी रखें?",
+    account:"अकाउंट", loggedInAs:"लॉग इन हैं", signOut:"साइन आउट", confirmSignOut:"अपने अकाउंट से साइन आउट करें?",
+    micDenied:"माइक्रोफ़ोन ब्लॉक है — एड्रेस बार में 🔒/ⓘ आइकन पर टैप करके माइक्रोफ़ोन की अनुमति दें।",
+    micNotFound:"इस डिवाइस पर कोई माइक्रोफ़ोन नहीं मिला।", micNetworkError:"वॉइस के लिए इंटरनेट कनेक्शन ज़रूरी है।",
+    noSpeech:"कुछ सुनाई नहीं दिया — दोबारा बोलने की कोशिश करें।", micError:"वॉइस इनपुट नाकाम हो गया — दोबारा कोशिश करें या टाइप करें।",
+    vehiclesTitle:"वाहन", vehiclesHelp:"एक से ज़्यादा वाहन ट्रैक करना है? यहाँ जोड़ें, फिर चुनें नई एंट्रीज़ किस वाहन के साथ टैग हों।",
+    add:"जोड़ें", activeVehicle:"नई एंट्रीज़ इसके साथ टैग हो रही हैं", vehicleAdded:"वाहन जोड़ा गया", confirmRemoveVehicle:"यह वाहन हटाएँ? इसकी पुरानी एंट्रीज़ का टैग बरक़रार रहेगा।",
+    allVehicles:"सभी वाहन", streakBadges:"स्ट्रीक बैज", days:"दिन",
+    weeklyMonthlyGoals:"साप्ताहिक और मासिक लक्ष्य", weeklyGoal:"साप्ताहिक लक्ष्य", monthlyGoal:"मासिक लक्ष्य",
+    sameAsBefore:"≈ बराबर", newSpend:"नया",
+    syncingCount:"{n} एंट्रीज़ क्लाउड में सिंक हो रही हैं…", offlineCount:"ऑफ़लाइन — {n} एंट्रीज़ सिंक होने का इंतज़ार कर रही हैं",
+    allSynced:"सभी एंट्रीज़ क्लाउड में सिंक हो गईं", savedOffline:"इस डिवाइस पर सेव हुआ — ऑनलाइन आते ही सिंक हो जाएगा",
+    schemaOutOfDate:"क्लाउड डेटाबेस को अपडेट की ज़रूरत है — Supabase में सेटअप SQL दोबारा चलाएँ, फिर यह सिंक हो जाएगा।",
+    updatedOffline:"इस डिवाइस पर अपडेट हुआ — ऑनलाइन आते ही सिंक हो जाएगा", deletedOffline:"इस डिवाइस पर डिलीट हुआ — ऑनलाइन आते ही सिंक हो जाएगा",
+    startTrip:"शुरू करें", stopTrip:"रोकें", tripIdle:"चलाने से पहले स्टार्ट दबाएँ", tripTracking:"माइलेज ट्रैक करें", mileageTrip:"सफ़र की माइलेज ट्रैक करें",
+    gpsNotSupported:"इस ब्राउज़र पर GPS सपोर्ट नहीं है।", gpsDenied:"लोकेशन ब्लॉक है — एड्रेस बार में 🔒/ⓘ आइकन पर टैप करके लोकेशन की अनुमति दें।",
+    gpsError:"आपकी लोकेशन नहीं मिल सकी — खुली जगह पर दोबारा कोशिश करें जहाँ GPS सिग्नल साफ़ हो।",
+    tripTooShort:"सफ़र लॉग करने के लिए बहुत छोटा है — कम से कम 0.1 मील होना चाहिए।",
+    tripSaved:"सफ़र लॉग हो गया: {miles} मील (+{amount})", mileageRates:"माइलेज अलाउंस रेट्स",
+    mileageRatesHelp:"डिफ़ॉल्ट UK HMRC रेट्स से मेल खाता है: हर टैक्स वर्ष के पहले हिस्से के माइल्स के लिए ज़्यादा रेट, उसके बाद कम रेट।",
+    rate1:"रेट — पहले माइल्स", rate2:"रेट — सीमा के बाद", threshold:"माइल्स की सीमा",
+    taxPot:"टैक्स पॉट", taxPotSubtext:"{date} से {profit} मुनाफ़े का {pct}%",
+    taxDeadlineIn:"{date} की भुगतान की आख़िरी तारीख़ में {days} दिन बाक़ी",
+    taxPotSettings:"टैक्स पॉट", taxPotSettingsHelp:"आपके मुनाफ़े का कितना % ऐप खुद-ब-खुद आपके Self Assessment टैक्स बिल के लिए अलग रखे? आम शुरुआत 25-30% है, लेकिन असली दर आपकी कुल आय पर निर्भर करती है — यक़ीन न हो तो अकाउंटेंट से पूछें।",
+    gpsWarmingUp:"सटीक GPS सिग्नल हासिल किया जा रहा है — इंतज़ार करें…", gpsLockAcquired:"GPS लॉक हो गया — ट्रैकिंग शुरू",
+    confirmTrip:"यह सफ़र कन्फ़र्म करें", tripConfirmNote:"नीचे GPS अनुमान है — सेव करने से पहले अपने डैशबोर्ड ओडोमीटर से जाँच कर के ठीक कर लें।",
+    milesLabel:"चलाए गए माइल्स",
+    appInstalled:"Milezy इंस्टॉल हो गई! अपनी होम स्क्रीन पर देखें।",
+    checkEmailTitle:"अपनी ईमेल चेक करें", checkEmailText:"हमने {email} पर एक कन्फ़र्मेशन लिंक भेजा है। उसे खोलें, अपना अकाउंट कन्फ़र्म करें, फिर वापस आकर लॉग इन करें।",
+    backToLogin:"लॉगिन पर वापस जाएँ",
+    autoDetectTitle:"ड्राइविंग ऑटो-डिटेक्ट", autoDetectHelp:"ड्राइविंग की स्पीड के आधार पर माइलेज ट्रैकिंग खुद-ब-खुद शुरू और बंद हो जाएगी — Start दबाने की ज़रूरत नहीं। यह सिर्फ़ तब काम करता है जब Milezy आपके ब्राउज़र में खुली हो (ऐप बंद होने या फ़ोन लॉक होने पर नहीं), और सक्रिय रहने पर ज़्यादा बैटरी इस्तेमाल करता है।",
+    autoTripStarted:"ड्राइविंग महसूस हुई — माइलेज ट्रैकिंग खुद-ब-खुद शुरू हो गई", autoDetectOn:"ऑटो-डिटेक्ट ऑन हो गया", autoDetectOff:"ऑटो-डिटेक्ट बंद हो गया"
   }
 };
 
@@ -2625,7 +2683,7 @@ async function toggleVoice(){
   }
 
   recognition = new SpeechRecognition();
-  recognition.lang = state.settings.language === 'ur' ? 'ur-PK' : 'en-GB';
+  recognition.lang = state.settings.language === 'ur' ? 'ur-PK' : (state.settings.language === 'hi' ? 'hi-IN' : 'en-GB');
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
   recognition.onstart = ()=>{
@@ -2930,10 +2988,16 @@ async function getTomorrowSuggestion(){
   headline.textContent = t('loadingSuggestion');
 
   if(state.entries.length < 3){
-    headline.textContent = state.settings.language==='ur' ? 'ابھی ڈیٹا کم ہے' : 'Not enough data yet';
-    body.textContent = state.settings.language==='ur'
-      ? 'کچھ اور دن اپنی آمدنی اور خرچے لکھیں تاکہ پیٹرن نظر آ سکے۔'
-      : 'Log a few more days of income and expenses so a pattern can emerge.';
+    if(state.settings.language==='ur'){
+      headline.textContent = 'ابھی ڈیٹا کم ہے';
+      body.textContent = 'کچھ اور دن اپنی آمدنی اور خرچے لکھیں تاکہ پیٹرن نظر آ سکے۔';
+    } else if(state.settings.language==='hi'){
+      headline.textContent = 'अभी डेटा कम है';
+      body.textContent = 'कुछ और दिन अपनी आय और खर्च लिखें ताकि पैटर्न दिख सके।';
+    } else {
+      headline.textContent = 'Not enough data yet';
+      body.textContent = 'Log a few more days of income and expenses so a pattern can emerge.';
+    }
     return;
   }
   if(!state.settings.apiKey && !hasNativeStorage){
@@ -2951,7 +3015,7 @@ async function getTomorrowSuggestion(){
     const sys = "You are analyzing a taxi/rideshare driver's historical earnings entries to give a short, honest, "
       + "practical suggestion for tomorrow's work strategy. You do NOT have access to real-time traffic, weather, or GPS data — "
       + "base your suggestion only on patterns in the provided data (which day-of-week earns most, category trends). "
-      + "Respond in " + (state.settings.language==='ur' ? "Urdu" : "English") + ". "
+      + "Respond in " + (state.settings.language==='ur' ? "Urdu" : (state.settings.language==='hi' ? "Hindi" : "English")) + ". "
       + "Respond with ONLY a raw JSON object, no markdown: "
       + '{"headline":"short 3-6 word headline","body":"2-3 sentence practical suggestion"}';
     const dataStr = "Income by day of week (totals): " + JSON.stringify(byDow)
@@ -2989,20 +3053,31 @@ function localTomorrowSuggestion(){
     if(avg > bestAvg){ bestAvg = avg; bestDow = Number(k); }
   });
   const isUr = state.settings.language === 'ur';
+  const isHi = state.settings.language === 'hi';
   const daysEn = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const daysUr = ['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'];
+  const daysHi = ['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'];
   if(bestDow===null){
+    if(isUr) return { headline:'ابھی پیٹرن واضح نہیں', body:'مختلف دنوں میں مزید اندراجات کریں تاکہ رجحان نظر آئے۔' };
+    if(isHi) return { headline:'अभी कोई साफ़ पैटर्न नहीं', body:'अलग-अलग दिनों में और एंट्रीज़ लिखें ताकि रुझान दिख सके।' };
+    return { headline:'No clear pattern yet', body:'Log entries across more days to reveal a trend.' };
+  }
+  const dayName = isUr ? daysUr[bestDow] : (isHi ? daysHi[bestDow] : daysEn[bestDow]);
+  if(isUr){
     return {
-      headline: isUr ? 'ابھی پیٹرن واضح نہیں' : 'No clear pattern yet',
-      body: isUr ? 'مختلف دنوں میں مزید اندراجات کریں تاکہ رجحان نظر آئے۔' : 'Log entries across more days to reveal a trend.'
+      headline: 'آپ کے اپنے ڈیٹا کے مطابق',
+      body: dayName+' کے دن آپ کی اوسط آمدنی سب سے زیادہ رہی ہے (تقریباً '+fmt(bestAvg)+')۔ یہ رجحان صرف آپ کی سیو کی ہوئی ہسٹری سے نکالا گیا ہے۔'
     };
   }
-  const dayName = isUr ? daysUr[bestDow] : daysEn[bestDow];
+  if(isHi){
+    return {
+      headline: 'आपके अपने डेटा के अनुसार',
+      body: dayName+' के दिन आपकी औसत आय सबसे ज़्यादा रही है (लगभग '+fmt(bestAvg)+')। यह रुझान सिर्फ़ आपकी सेव की गई हिस्ट्री से निकाला गया है।'
+    };
+  }
   return {
-    headline: isUr ? 'آپ کے اپنے ڈیٹا کے مطابق' : 'Based on your own data',
-    body: isUr
-      ? dayName+' کے دن آپ کی اوسط آمدنی سب سے زیادہ رہی ہے (تقریباً '+fmt(bestAvg)+')۔ یہ رجحان صرف آپ کی سیو کی ہوئی ہسٹری سے نکالا گیا ہے۔'
-      : 'Your average income has historically been highest on '+dayName+'s (around '+fmt(bestAvg)+'). This is drawn purely from your own logged history, not live data.'
+    headline: 'Based on your own data',
+    body: 'Your average income has historically been highest on '+dayName+'s (around '+fmt(bestAvg)+'). This is drawn purely from your own logged history, not live data.'
   };
 }
 
